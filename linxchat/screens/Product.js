@@ -5,10 +5,13 @@ import {
   Image,
   Text,
   Pressable,
+  Share,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import React, { useState } from "react";
 import ModalProd from "./Modal";
+import { AntDesign } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -70,8 +73,6 @@ export default function Product() {
     setModalVisible(true);
   }
 
-  // console.log(focus);
-
   const onViewRef = React.useRef((viewableItems) => {
     // console.log(viewableItems.viewableItems[0].item.id);
     // Use viewable items in state or as intended
@@ -90,6 +91,22 @@ export default function Product() {
       changeFocus("Grey");
     }
   });
+
+  let index = flatListRef.current?.currentIndex;
+  const shareOptions = {
+    title: "Kaos Polos Berkualitas",
+    message:
+      `Produk Kaos Polos Berkualitas ` +
+      data[index]?.imgUrl +
+      ` Dengan harga` +
+      harga,
+    url: data[index]?.imgUrl,
+    subject: "Product",
+  };
+
+  function shareProd() {
+    Share.share(shareOptions);
+  }
 
   return (
     <View style={styles.container}>
@@ -112,7 +129,23 @@ export default function Product() {
         />
       </View>
       <View style={styles.productDesc}>
-        <Text>Kaos Polos Berkualitas</Text>
+        <View style={styles.titleIcon}>
+          <View>
+            <Text style={styles.title}>Kaos Polos Berkualitas</Text>
+          </View>
+          <View style={styles.icon}>
+            <Pressable onPress={shareProd}>
+              <AntDesign
+                style={styles.share}
+                name='sharealt'
+                size={24}
+                color='black'
+              />
+            </Pressable>
+
+            <MaterialIcons name='favorite-border' size={28} color='black' />
+          </View>
+        </View>
         <Text>{harga}</Text>
         <View style={styles.colors}>
           <Text>Warna</Text>
@@ -154,12 +187,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
   },
+  titleIcon: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  icon: {
+    flexDirection: "row",
+  },
+  share: {
+    marginHorizontal: 8,
+  },
   images: {
     width: windowWidth,
     height: windowHeight / 2,
   },
   colors: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },

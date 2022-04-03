@@ -25,7 +25,7 @@ const ModalProd = ({ setModalVisible, modalVisible, data }) => {
 
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
-      console.log(e.scale);
+      // console.log(e.scale);
       setScale(e.scale);
     })
     .onEnd(() => {
