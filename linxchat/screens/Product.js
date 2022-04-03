@@ -1,6 +1,14 @@
-import { StyleSheet, View, Dimensions, Image, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Image,
+  Text,
+  Pressable,
+} from "react-native";
 import Carousel from "react-native-snap-carousel";
 import React, { useState } from "react";
+import ModalProd from "./Modal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -32,25 +40,37 @@ const data = [
   },
 ];
 
-let renderItem = ({ item, index }) => {
-  return (
-    <View>
-      <Image style={styles.images} source={{ uri: item.imgUrl }} />
-    </View>
-  );
-};
-
 export default function Product() {
   let [harga, setHarga] = useState(0);
   const [focus, setFocus] = useState({});
   let flatListRef = React.useRef();
+  const [modalVisible, setModalVisible] = useState(false);
+  const viewConfigRef = React.useRef({ viewAreaCoveragePercentThreshold: 50 });
 
   function changeFocus(color, index) {
     flatListRef.current.snapToItem(index);
-    setFocus({ [color]: true });
+    setFocus((prevRes) => {
+      return {
+        ...(prevRes = false),
+        [color]: true,
+      };
+    });
   }
 
-  console.log(focus);
+  let renderItem = ({ item, index }) => {
+    return (
+      <Pressable onPress={showPic}>
+        <Image style={styles.images} source={{ uri: item.imgUrl }} />
+      </Pressable>
+    );
+  };
+
+  function showPic() {
+    // let index = flatListRef.current.currentIndex();
+    setModalVisible(true);
+  }
+
+  // console.log(focus);
 
   const onViewRef = React.useRef((viewableItems) => {
     // console.log(viewableItems.viewableItems[0].item.id);
@@ -70,10 +90,14 @@ export default function Product() {
       changeFocus("Grey");
     }
   });
-  const viewConfigRef = React.useRef({ viewAreaCoveragePercentThreshold: 50 });
 
   return (
     <View style={styles.container}>
+      <ModalProd
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        data={data[flatListRef.current?.currentIndex]}
+      ></ModalProd>
       <View style={styles.carousel}>
         <Carousel
           data={data}
