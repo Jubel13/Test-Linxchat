@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import ModalProd from "./Modal";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -108,6 +109,10 @@ export default function Product() {
     Share.share(shareOptions);
   }
 
+  function currencyFormat(num) {
+    return "Rp " + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+
   return (
     <View style={styles.container}>
       <ModalProd
@@ -121,8 +126,7 @@ export default function Product() {
           renderItem={renderItem}
           sliderWidth={windowWidth}
           itemWidth={windowWidth}
-          sliderHeight={windowHeight / 2}
-          itemHeight={windowHeight / 2}
+          sliderHeight={windowHeight * 0.35}
           viewabilityConfig={viewConfigRef.current}
           onViewableItemsChanged={onViewRef.current}
           ref={flatListRef}
@@ -146,7 +150,14 @@ export default function Product() {
             <MaterialIcons name='favorite-border' size={28} color='black' />
           </View>
         </View>
-        <Text>{harga}</Text>
+        <Text style={styles.harga}>{currencyFormat(+harga)}</Text>
+        <Text style={{ marginBottom: 10 }}>Kondisi: Baru</Text>
+        <View
+          style={{
+            borderBottomColor: "black",
+            borderBottomWidth: 1,
+          }}
+        />
         <View style={styles.colors}>
           <Text>Warna</Text>
           {data.map((el, index) => {
@@ -163,6 +174,79 @@ export default function Product() {
             );
           })}
         </View>
+        <View style={styles.ukuran}>
+          <View>
+            <Text>Ukuran</Text>
+          </View>
+          <View style={styles.jenisUkuran}>
+            <Text style={{ ...styles.buttonColor, marginHorizontal: 10 }}>
+              M
+            </Text>
+            <Text style={styles.activeStyle}>L</Text>
+          </View>
+        </View>
+        <View style={styles.jumlahSection}>
+          <View>
+            <Text>Jumlah</Text>
+          </View>
+          <View style={styles.changeJumlah}>
+            <Text
+              style={{
+                ...styles.buttonColor,
+                borderRadius: 50,
+                paddingHorizontal: 18,
+              }}
+            >
+              -
+            </Text>
+            <Text style={{ marginHorizontal: 8 }}>1</Text>
+            <Text
+              style={{
+                ...styles.activeStyle,
+                borderRadius: 50,
+                paddingHorizontal: 18,
+              }}
+            >
+              +
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            borderBottomColor: "grey",
+            borderBottomWidth: 1,
+            marginTop: 10,
+          }}
+        />
+        <View style={{ marginTop: 10, marginBottom: 10 }}>
+          <Text style={{ fontWeight: "bold" }}>Deskripsi</Text>
+          <Text>
+            T-shirt siluet oversized untuk pria dan wanita. Mudah dipadupadankan
+            untuk berbagai pilihan styling. Dengan kantong fungsional.
+          </Text>
+        </View>
+        <View
+          style={{
+            borderBottomColor: "grey",
+            borderBottomWidth: 1,
+            marginTop: 10,
+          }}
+        />
+        <View style={styles.bottomSection}>
+          <Entypo name='chat' size={40} color='orange' />
+          <AntDesign name='shoppingcart' size={40} color='orange' />
+          <Text
+            style={{
+              ...styles.activeStyle,
+              paddingHorizontal: 70,
+              fontSize: 20,
+              maxHeight: 100,
+              borderRadius: 50,
+            }}
+          >
+            Beli Sekarang
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -172,20 +256,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "flex-start",
   },
-
   carousel: {
-    flex: 1,
+    flex: 0.65,
     padding: 0,
-    marginBottom: 15,
   },
   productDesc: {
     flex: 1,
     margin: 12,
     marginTop: 0,
-    borderWidth: 1,
-    borderStyle: "solid",
   },
   titleIcon: {
     flexDirection: "row",
@@ -204,11 +283,13 @@ const styles = StyleSheet.create({
   },
   images: {
     width: windowWidth,
-    height: windowHeight / 2,
+    height: windowHeight * 0.35,
   },
   colors: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 10,
+    alignItems: "center",
   },
   buttonColor: {
     maxHeight: 45,
@@ -229,5 +310,33 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderStyle: "solid",
     borderWidth: 1,
+  },
+  harga: {
+    color: "red",
+  },
+  ukuran: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  jenisUkuran: {
+    flexDirection: "row",
+  },
+  jumlahSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  changeJumlah: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  bottomSection: {
+    marginVertical: 25,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
